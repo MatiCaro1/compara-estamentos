@@ -1,0 +1,27 @@
+{
+  "casos": [
+    {
+      "nombre": "Valentina Ordenes",
+      "unidad": "DPDE - SIAC",
+      "estamento_actual": "Administrativo",
+      "grado_actual": 17,
+      "estamento_solicitado": "Profesional",
+      "grado_solicitado": 17,
+      "diff_mensual": 56080,
+      "diff_anual": 672960,
+      "pct_incremento": 3.831234398035741,
+      "estado": "en_gestion",
+      "fundamento_legal": "art_5_ley19296",
+      "notas": [],
+      "tiene_documentacion": false,
+      "id": "e5d66e01-73f3-4615-8d43-e4c42dfd7030",
+      "fecha_ingreso": "2026-06-08T16:32:57.615Z",
+      "fecha_actualizacion": "2026-06-08T16:32:57.615Z"
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "ultimo_export": "",
+    "dirigente_local": ""
+  }
+}

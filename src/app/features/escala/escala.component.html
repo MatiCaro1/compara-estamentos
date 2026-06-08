@@ -1,0 +1,93 @@
+<div class="escala-view">
+  <div class="page-header">
+    <h2 class="page-title">Escala de Remuneraciones 2026</h2>
+    <span class="anio-badge">2026</span>
+  </div>
+
+  <mat-card class="filtro-card">
+    <mat-card-content>
+      <div class="filtro-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Filtrar por estamento</mat-label>
+          <mat-select [ngModel]="filtroEstamento()" (ngModelChange)="filtroEstamento.set($event)">
+            <mat-option value="">Todos los estamentos</mat-option>
+            @for (e of estamentos; track e) {
+              <mat-option [value]="e">{{ e }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <span class="result-count">{{ escala().length }} registro(s)</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="table-card">
+    <div class="table-scroll">
+      <table mat-table [dataSource]="escala()">
+
+        <ng-container matColumnDef="estamento">
+          <th mat-header-cell *matHeaderCellDef>Estamento</th>
+          <td mat-cell *matCellDef="let r">{{ r.estamento }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="grado">
+          <th mat-header-cell *matHeaderCellDef>Grado</th>
+          <td mat-cell *matCellDef="let r" class="center">{{ r.grado }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="sueldo_base">
+          <th mat-header-cell *matHeaderCellDef>Sueldo Base</th>
+          <td mat-cell *matCellDef="let r" class="right">{{ r.sueldo_base | currency:'CLP':'$':'1.0-0' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="incremento_dl3501">
+          <th mat-header-cell *matHeaderCellDef>Inc. DL 3501</th>
+          <td mat-cell *matCellDef="let r" class="right">{{ r.incremento_dl3501 | currency:'CLP':'$':'1.0-0' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="asig_fiscalizacion">
+          <th mat-header-cell *matHeaderCellDef>Asig. Fiscalización</th>
+          <td mat-cell *matCellDef="let r" class="right">{{ r.asig_fiscalizacion | currency:'CLP':'$':'1.0-0' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="bon_salud">
+          <th mat-header-cell *matHeaderCellDef>Bon. Salud</th>
+          <td mat-cell *matCellDef="let r" class="right">{{ r.bon_salud | currency:'CLP':'$':'1.0-0' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="bon_previsional">
+          <th mat-header-cell *matHeaderCellDef>Bon. Previsional</th>
+          <td mat-cell *matCellDef="let r" class="right">{{ r.bon_previsional | currency:'CLP':'$':'1.0-0' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="asig_unica">
+          <th mat-header-cell *matHeaderCellDef>Asig. Única</th>
+          <td mat-cell *matCellDef="let r" class="right">{{ r.asig_unica | currency:'CLP':'$':'1.0-0' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ley18091_art17">
+          <th mat-header-cell *matHeaderCellDef>Ley 18.091 Art.17</th>
+          <td mat-cell *matCellDef="let r" class="right">{{ r.ley18091_art17 | currency:'CLP':'$':'1.0-0' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="asig_desempenio_fija">
+          <th mat-header-cell *matHeaderCellDef>Asig. Desempeño Fija</th>
+          <td mat-cell *matCellDef="let r" class="right">{{ r.asig_desempenio_fija | currency:'CLP':'$':'1.0-0' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="asig_desempenio_variable">
+          <th mat-header-cell *matHeaderCellDef>Asig. Desempeño Variable</th>
+          <td mat-cell *matCellDef="let r" class="right">{{ r.asig_desempenio_variable | currency:'CLP':'$':'1.0-0' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="rem_bruta">
+          <th mat-header-cell *matHeaderCellDef class="rem-header">Rem. Bruta Total</th>
+          <td mat-cell *matCellDef="let r" class="right rem-cell">{{ r.rem_bruta | currency:'CLP':'$':'1.0-0' }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </mat-card>
+</div>

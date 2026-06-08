@@ -1,0 +1,136 @@
+@if (caso(); as c) {
+<div class="detalle-caso">
+  <div class="page-header">
+    <button mat-icon-button routerLink="/casos">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2 class="page-title">{{ c.nombre }}</h2>
+    <span class="estado-badge" [style.background]="estadoColor(c.estado)">
+      {{ estadoLabel(c.estado) }}
+    </span>
+    <span class="spacer"></span>
+    <button mat-icon-button [routerLink]="['/casos', c.id, 'editar']" matTooltip="Editar">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button color="warn" (click)="eliminar()" matTooltip="Eliminar">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+
+  <div class="detail-grid">
+
+    <!-- Info básica -->
+    <mat-card>
+      <mat-card-header><mat-card-title>Información del Funcionario</mat-card-title></mat-card-header>
+      <mat-card-content>
+        <dl class="info-list">
+          @if (c.rut) { <dt>RUT</dt><dd>{{ c.rut }}</dd> }
+          @if (c.unidad) { <dt>Unidad</dt><dd>{{ c.unidad }}</dd> }
+          @if (c.dirigente_responsable) { <dt>Dirigente</dt><dd>{{ c.dirigente_responsable }}</dd> }
+          <dt>Ingreso</dt><dd>{{ c.fecha_ingreso | date:'dd/MM/yyyy HH:mm' }}</dd>
+          <dt>Actualización</dt><dd>{{ c.fecha_actualizacion | date:'dd/MM/yyyy HH:mm' }}</dd>
+        </dl>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Análisis económico -->
+    <mat-card class="analisis-card">
+      <mat-card-header><mat-card-title>Análisis Económico</mat-card-title></mat-card-header>
+      <mat-card-content>
+        <div class="posiciones">
+          <div class="posicion-bloque">
+            <span class="pos-label">Posición Actual</span>
+            <strong>{{ c.estamento_actual }} / Grado {{ c.grado_actual }}</strong>
+          </div>
+          <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+          <div class="posicion-bloque">
+            <span class="pos-label">Posición Solicitada</span>
+            <strong>{{ c.estamento_solicitado }} / Grado {{ c.grado_solicitado }}</strong>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="metricas">
+          <div class="metrica" [class.positive]="c.diff_mensual > 0" [class.negative]="c.diff_mensual < 0">
+            <span class="met-label">Diferencia Mensual</span>
+            <span class="met-value">{{ c.diff_mensual > 0 ? '+' : '' }}{{ c.diff_mensual | currency:'CLP':'$':'1.0-0' }}</span>
+          </div>
+          <div class="metrica" [class.positive]="c.diff_anual > 0" [class.negative]="c.diff_anual < 0">
+            <span class="met-label">Diferencia Anual</span>
+            <span class="met-value">{{ c.diff_anual > 0 ? '+' : '' }}{{ c.diff_anual | currency:'CLP':'$':'1.0-0' }}</span>
+          </div>
+          <div class="metrica" [class.positive]="c.pct_incremento > 0" [class.negative]="c.pct_incremento < 0">
+            <span class="met-label">% Incremento</span>
+            <span class="met-value">{{ c.pct_incremento > 0 ? '+' : '' }}{{ c.pct_incremento.toFixed(2) }}%</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Gestión -->
+    <mat-card>
+      <mat-card-header><mat-card-title>Gestión</mat-card-title></mat-card-header>
+      <mat-card-content>
+        <dl class="info-list">
+          <dt>Fundamento Legal</dt>
+          <dd>{{ fundamentoLabel(c.fundamento_legal) }}</dd>
+          @if (c.fundamento_detalle) {
+            <dt>Detalle</dt><dd>{{ c.fundamento_detalle }}</dd>
+          }
+          <dt>Documentación</dt>
+          <dd>{{ c.tiene_documentacion ? 'Sí' : 'No' }}</dd>
+          @if (c.descripcion_docs) {
+            <dt>Descripción docs</dt><dd>{{ c.descripcion_docs }}</dd>
+          }
+        </dl>
+
+        <mat-divider></mat-divider>
+        <div class="cambiar-estado">
+          <span class="estado-label-text">Cambiar estado:</span>
+          <mat-select [value]="c.estado" (selectionChange)="cambiarEstado($event.value)" class="estado-select">
+            @for (e of estadosMeta; track e.value) {
+              <mat-option [value]="e.value">{{ e.label }}</mat-option>
+            }
+          </mat-select>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Notas -->
+    <mat-card class="notas-card">
+      <mat-card-header><mat-card-title>Notas de Seguimiento</mat-card-title></mat-card-header>
+      <mat-card-content>
+        <div class="notas-list">
+          @if (c.notas.length === 0) {
+            <p class="no-notas">Sin notas registradas.</p>
+          } @else {
+            @for (nota of c.notas; track nota.timestamp) {
+              <div class="nota-item">
+                <span class="nota-ts">{{ nota.timestamp | date:'dd/MM/yyyy HH:mm' }}</span>
+                <span class="nota-texto">{{ nota.texto }}</span>
+              </div>
+            }
+          }
+        </div>
+        <mat-divider></mat-divider>
+        <div class="agregar-nota">
+          <mat-form-field appearance="outline" class="nota-input">
+            <mat-label>Nueva nota</mat-label>
+            <textarea matInput rows="2"
+              [ngModel]="nuevaNota()"
+              (ngModelChange)="nuevaNota.set($event)"
+              placeholder="Escribe una nota de seguimiento..."></textarea>
+          </mat-form-field>
+          <button mat-raised-button color="primary"
+            (click)="agregarNota()"
+            [disabled]="!nuevaNota().trim()">
+            <mat-icon>add_comment</mat-icon> Agregar
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>
+} @else {
+  <div class="loading">Cargando...</div>
+}

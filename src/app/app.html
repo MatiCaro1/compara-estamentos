@@ -1,0 +1,41 @@
+<mat-toolbar color="primary" class="app-toolbar">
+  <button mat-icon-button (click)="toggleSidenav()" aria-label="Menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span class="toolbar-title">UNESIE — Gestión de Casos</span>
+  <span class="toolbar-spacer"></span>
+  <button mat-icon-button routerLink="/exportar" aria-label="Exportar / Importar">
+    <mat-icon>sync</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav [opened]="sidenavOpen()" mode="side" class="app-sidenav">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/" routerLinkActive="nav-active" [routerLinkActiveOptions]="{exact:true}">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle>Dashboard</span>
+      </a>
+      <a mat-list-item routerLink="/casos" routerLinkActive="nav-active">
+        <mat-icon matListItemIcon>folder_open</mat-icon>
+        <span matListItemTitle>Casos</span>
+      </a>
+      <a mat-list-item routerLink="/escala" routerLinkActive="nav-active">
+        <mat-icon matListItemIcon>table_chart</mat-icon>
+        <span matListItemTitle>Escala 2026</span>
+      </a>
+      <a mat-list-item routerLink="/comparador" routerLinkActive="nav-active">
+        <mat-icon matListItemIcon>compare_arrows</mat-icon>
+        <span matListItemTitle>Comparador</span>
+      </a>
+      <a mat-list-item routerLink="/exportar" routerLinkActive="nav-active">
+        <mat-icon matListItemIcon>import_export</mat-icon>
+        <span matListItemTitle>Export / Import</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="app-content">
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>

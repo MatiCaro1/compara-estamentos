@@ -1,0 +1,100 @@
+<mat-card class="comparador">
+  <mat-card-header>
+    <mat-card-title>Comparador de Estamentos / Grados</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="comp-grid">
+
+      <!-- Posición A -->
+      <div class="pos-col">
+        <h4 class="pos-title">Posición A (Actual)</h4>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Estamento</mat-label>
+          <mat-select [ngModel]="estamentoA()" (ngModelChange)="onEstamentoAChange($event)">
+            @for (e of estamentos; track e) {
+              <mat-option [value]="e">{{ e }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Grado</mat-label>
+          <mat-select [ngModel]="gradoA()" (ngModelChange)="onGradoAChange($event)"
+            [disabled]="!estamentoA()">
+            @for (g of gradosA(); track g) {
+              <mat-option [value]="g">{{ g }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        @if (remA() !== null) {
+          <div class="rem-display">
+            <span>Remuneración bruta:</span>
+            <strong>{{ remA() | currency:'CLP':'$':'1.0-0' }}</strong>
+          </div>
+        }
+      </div>
+
+      <!-- Arrow -->
+      <div class="arrow-col">
+        <mat-icon>compare_arrows</mat-icon>
+      </div>
+
+      <!-- Posición B -->
+      <div class="pos-col">
+        <h4 class="pos-title">Posición B (Solicitada)</h4>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Estamento</mat-label>
+          <mat-select [ngModel]="estamentoB()" (ngModelChange)="onEstamentoBChange($event)">
+            @for (e of estamentos; track e) {
+              <mat-option [value]="e">{{ e }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Grado</mat-label>
+          <mat-select [ngModel]="gradoB()" (ngModelChange)="onGradoBChange($event)"
+            [disabled]="!estamentoB()">
+            @for (g of gradosB(); track g) {
+              <mat-option [value]="g">{{ g }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        @if (remB() !== null) {
+          <div class="rem-display">
+            <span>Remuneración bruta:</span>
+            <strong>{{ remB() | currency:'CLP':'$':'1.0-0' }}</strong>
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (diff(); as d) {
+      <mat-divider></mat-divider>
+      <div class="resultado">
+        <h4>Resultado de la Comparación</h4>
+        <div class="metricas">
+          <div class="metrica" [class.positive]="d.diff_mensual > 0" [class.negative]="d.diff_mensual < 0">
+            <span>Diferencia Mensual</span>
+            <strong>{{ d.diff_mensual > 0 ? '+' : '' }}{{ d.diff_mensual | currency:'CLP':'$':'1.0-0' }}</strong>
+          </div>
+          <div class="metrica" [class.positive]="d.diff_anual > 0" [class.negative]="d.diff_anual < 0">
+            <span>Diferencia Anual</span>
+            <strong>{{ d.diff_anual > 0 ? '+' : '' }}{{ d.diff_anual | currency:'CLP':'$':'1.0-0' }}</strong>
+          </div>
+          <div class="metrica" [class.positive]="d.pct > 0" [class.negative]="d.pct < 0">
+            <span>% Incremento</span>
+            <strong>{{ d.pct > 0 ? '+' : '' }}{{ d.pct.toFixed(2) }}%</strong>
+          </div>
+        </div>
+      </div>
+    }
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button (click)="limpiar()">
+      <mat-icon>restart_alt</mat-icon> Limpiar
+    </button>
+  </mat-card-actions>
+</mat-card>

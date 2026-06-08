@@ -1,0 +1,130 @@
+.detalle-caso { padding: 24px; }
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.page-title { font-size: 1.4rem; font-weight: 500; margin: 0; color: #37474f; }
+
+.spacer { flex: 1; }
+
+.estado-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 16px;
+  color: white;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 800px) { grid-template-columns: 1fr; }
+}
+
+.notas-card { grid-column: 1 / -1; }
+
+mat-card-content { padding-top: 16px !important; }
+
+.info-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 16px;
+  margin: 0;
+
+  dt { font-weight: 600; font-size: 0.82rem; color: #757575; align-self: baseline; }
+  dd { margin: 0; font-size: 0.9rem; color: #212121; padding-bottom: 4px; }
+}
+
+.analisis-card { background: #f8f9ff; }
+
+.posiciones {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.posicion-bloque {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  .pos-label { font-size: 0.75rem; color: #9e9e9e; }
+  strong { font-size: 1rem; color: #37474f; }
+}
+
+.arrow-icon { color: #5c6bc0; }
+
+.metricas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+
+  @media (max-width: 600px) { grid-template-columns: 1fr; }
+}
+
+.metrica {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  background: white;
+
+  .met-label { font-size: 0.75rem; color: #757575; }
+  .met-value { font-size: 1.05rem; font-weight: 700; color: #424242; }
+  &.positive .met-value { color: #2e7d32; }
+  &.negative .met-value { color: #c62828; }
+}
+
+.cambiar-estado {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  .estado-label-text { font-size: 0.85rem; color: #616161; white-space: nowrap; }
+  .estado-select { flex: 1; }
+}
+
+.notas-list {
+  max-height: 280px;
+  overflow-y: auto;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.no-notas { color: #9e9e9e; font-style: italic; }
+
+.nota-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  background: #fafafa;
+  border-left: 3px solid #5c6bc0;
+  border-radius: 0 6px 6px 0;
+
+  .nota-ts { font-size: 0.75rem; color: #9e9e9e; }
+  .nota-texto { font-size: 0.9rem; color: #212121; }
+}
+
+.agregar-nota {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 12px;
+  .nota-input { flex: 1; }
+}
+
+.loading { padding: 40px; text-align: center; color: #9e9e9e; }

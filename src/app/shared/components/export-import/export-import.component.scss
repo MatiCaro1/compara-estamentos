@@ -1,0 +1,64 @@
+.export-import { padding: 24px; max-width: 700px; }
+
+.page-title { font-size: 1.5rem; font-weight: 500; margin: 0 0 8px; color: #37474f; }
+.page-desc { color: #757575; margin: 0 0 24px; }
+
+.section-card {
+  margin-bottom: 16px;
+  mat-card-content { padding-top: 16px !important; }
+}
+
+.dirigente-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  mat-form-field { flex: 1; }
+}
+
+.export-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.export-desc {
+  font-size: 0.85rem;
+  color: #616161;
+  max-width: 400px;
+  strong { color: #37474f; }
+}
+
+.import-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #e3f2fd;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #1565c0;
+  margin-bottom: 16px;
+  mat-icon { font-size: 1.1rem; width: 1.1rem; height: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+}
+
+.import-result {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+
+  mat-icon { flex-shrink: 0; }
+
+  &.success {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+  &.error {
+    background: #ffebee;
+    color: #c62828;
+  }
+}

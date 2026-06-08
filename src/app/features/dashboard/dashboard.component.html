@@ -1,0 +1,111 @@
+<div class="dashboard">
+  <h2 class="page-title">Dashboard</h2>
+
+  <!-- Summary cards -->
+  <div class="cards-grid">
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="card-icon accent"><mat-icon>folder_open</mat-icon></div>
+        <div class="card-data">
+          <span class="card-value">{{ totalCasos() }}</span>
+          <span class="card-label">Total Casos</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="card-icon warn"><mat-icon>trending_up</mat-icon></div>
+        <div class="card-data">
+          <span class="card-value">{{ costoMensual() | currency:'CLP':'$':'1.0-0' }}</span>
+          <span class="card-label">Costo Mensual Acumulado</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="card-icon primary"><mat-icon>calendar_month</mat-icon></div>
+        <div class="card-data">
+          <span class="card-value">{{ costoAnual() | currency:'CLP':'$':'1.0-0' }}</span>
+          <span class="card-label">Costo Anual Proyectado</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="card-icon success"><mat-icon>check_circle</mat-icon></div>
+        <div class="card-data">
+          <span class="card-value">{{ favorables() }}</span>
+          <span class="card-label">Resueltos Favorables</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="row-grid">
+    <!-- Estado breakdown -->
+    <mat-card class="estado-card">
+      <mat-card-header>
+        <mat-card-title>Casos por Estado</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (totalCasos() === 0) {
+          <p class="empty-msg">No hay casos registrados.</p>
+        } @else {
+          <div class="estado-list">
+            @for (e of porEstado(); track e.value) {
+              <div class="estado-item">
+                <span class="estado-dot" [style.background]="e.color"></span>
+                <span class="estado-nombre">{{ e.label }}</span>
+                <span class="estado-count">{{ e.count }}</span>
+              </div>
+            }
+          </div>
+        }
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button routerLink="/casos">Ver todos los casos</button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Bar chart -->
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-card-title>Diferencia mensual por caso (top 8)</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (topCasos().length === 0) {
+          <p class="empty-msg">No hay casos con diferencia positiva.</p>
+        } @else {
+          <div class="bar-chart">
+            @for (c of topCasos(); track c.id) {
+              <div class="bar-row">
+                <span class="bar-label" [title]="c.nombre">{{ c.nombre | slice:0:22 }}</span>
+                <div class="bar-track">
+                  <div class="bar-fill" [style.width]="barWidth(c.diff_mensual)"
+                       [style.background]="estadoColor(c.estado)">
+                  </div>
+                </div>
+                <span class="bar-value">{{ c.diff_mensual | currency:'CLP':'$':'1.0-0' }}</span>
+              </div>
+            }
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  @if (totalCasos() === 0) {
+    <mat-card class="empty-card">
+      <mat-card-content>
+        <mat-icon>inbox</mat-icon>
+        <p>No hay casos registrados. ¡Comienza creando el primero!</p>
+        <button mat-raised-button color="primary" routerLink="/casos/nuevo">
+          <mat-icon>add</mat-icon> Nuevo Caso
+        </button>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

@@ -1,0 +1,128 @@
+<div class="lista-casos">
+  <div class="page-header">
+    <h2 class="page-title">Casos</h2>
+    <button mat-raised-button color="primary" routerLink="/casos/nuevo">
+      <mat-icon>add</mat-icon> Nuevo Caso
+    </button>
+  </div>
+
+  <!-- Filtros -->
+  <mat-card class="filtros-card">
+    <mat-card-content>
+      <div class="filtros-row">
+        <mat-form-field appearance="outline" class="filtro-search">
+          <mat-label>Buscar por nombre, RUT o unidad</mat-label>
+          <input matInput [ngModel]="filtroBusqueda()" (ngModelChange)="filtroBusqueda.set($event)" placeholder="Buscar...">
+          <mat-icon matPrefix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Estado</mat-label>
+          <mat-select [ngModel]="filtroEstado()" (ngModelChange)="filtroEstado.set($event)">
+            <mat-option value="">Todos</mat-option>
+            @for (e of estadosMeta; track e.value) {
+              <mat-option [value]="e.value">{{ e.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Estamento</mat-label>
+          <mat-select [ngModel]="filtroEstamento()" (ngModelChange)="filtroEstamento.set($event)">
+            <mat-option value="">Todos</mat-option>
+            @for (e of estamentos; track e) {
+              <mat-option [value]="e">{{ e }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-button (click)="limpiarFiltros()" [disabled]="!filtroEstado() && !filtroEstamento() && !filtroBusqueda()">
+          <mat-icon>clear</mat-icon> Limpiar
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <p class="result-count">{{ casosFiltrados().length }} caso(s) encontrado(s)</p>
+
+  @if (casosFiltrados().length === 0) {
+    <mat-card class="empty-state">
+      <mat-card-content>
+        <mat-icon>search_off</mat-icon>
+        <p>No se encontraron casos con los filtros aplicados.</p>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <mat-card class="table-card">
+      <table mat-table [dataSource]="casosFiltrados()" class="mat-elevation-z0">
+
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef>Funcionario</th>
+          <td mat-cell *matCellDef="let c">
+            <div class="nombre-cell">
+              <strong>{{ c.nombre }}</strong>
+              @if (c.rut) { <small>{{ c.rut }}</small> }
+              @if (c.unidad) { <small class="unidad">{{ c.unidad }}</small> }
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="posicion_actual">
+          <th mat-header-cell *matHeaderCellDef>Posición Actual</th>
+          <td mat-cell *matCellDef="let c">
+            <span class="posicion">{{ c.estamento_actual }} / G{{ c.grado_actual }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="posicion_solicitada">
+          <th mat-header-cell *matHeaderCellDef>Posición Solicitada</th>
+          <td mat-cell *matCellDef="let c">
+            <span class="posicion">{{ c.estamento_solicitado }} / G{{ c.grado_solicitado }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="diff_mensual">
+          <th mat-header-cell *matHeaderCellDef>Diff Mensual</th>
+          <td mat-cell *matCellDef="let c">
+            <span [class.positive]="c.diff_mensual > 0" [class.negative]="c.diff_mensual < 0">
+              {{ c.diff_mensual > 0 ? '+' : '' }}{{ c.diff_mensual | number:'1.0-0' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let c">
+            <span class="estado-badge" [style.background]="estadoColor(c.estado)">
+              {{ estadoLabel(c.estado) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fecha_ingreso">
+          <th mat-header-cell *matHeaderCellDef>Ingreso</th>
+          <td mat-cell *matCellDef="let c">{{ c.fecha_ingreso | date:'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let c">
+            <button mat-icon-button [routerLink]="['/casos', c.id]" matTooltip="Ver detalle">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button [routerLink]="['/casos', c.id, 'editar']" matTooltip="Editar">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="eliminar(c)" matTooltip="Eliminar">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="caso-row"
+            [routerLink]="['/casos', row.id]"></tr>
+      </table>
+    </mat-card>
+  }
+</div>

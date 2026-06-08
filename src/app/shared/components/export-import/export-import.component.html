@@ -1,0 +1,91 @@
+<div class="export-import">
+  <h2 class="page-title">Exportar / Importar</h2>
+  <p class="page-desc">Sincroniza los datos entre dirigentes exportando e importando el archivo JSON completo.</p>
+
+  <!-- Configuración local -->
+  <mat-card class="section-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>person</mat-icon>
+      <mat-card-title>Configuración Local</mat-card-title>
+      <mat-card-subtitle>Identifica esta instancia de la app</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="dirigente-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Tu nombre (dirigente)</mat-label>
+          <input matInput [ngModel]="dirigenteLocal()" (ngModelChange)="dirigenteLocal.set($event)"
+            placeholder="Ej: María González">
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="guardarDirigente()">
+          <mat-icon>save</mat-icon> Guardar
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Exportar -->
+  <mat-card class="section-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>upload</mat-icon>
+      <mat-card-title>Exportar Datos</mat-card-title>
+      <mat-card-subtitle>{{ casos().length }} caso(s) registrado(s)</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="export-actions">
+        <button mat-raised-button color="primary" (click)="exportJSON()" [disabled]="casos().length === 0">
+          <mat-icon>download</mat-icon> Descargar JSON
+        </button>
+        <div class="export-desc">
+          <strong>JSON completo</strong>: Contiene todos los casos, la escala y metadatos. Úsalo para sincronizar con otros dirigentes.
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="export-actions" style="margin-top: 16px">
+        <button mat-stroked-button color="accent" (click)="exportExcel()" [disabled]="casos().length === 0">
+          <mat-icon>table_view</mat-icon> Descargar Excel
+        </button>
+        <div class="export-desc">
+          <strong>Excel (.xlsx)</strong>: Tabla con todos los casos para informes o reportes externos.
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Importar -->
+  <mat-card class="section-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>download</mat-icon>
+      <mat-card-title>Importar Datos</mat-card-title>
+      <mat-card-subtitle>Fusiona casos de otro dirigente</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="import-info">
+        <mat-icon>info</mat-icon>
+        El import es inteligente: solo agrega casos nuevos (por ID). Los duplicados se omiten automáticamente.
+      </p>
+
+      <input type="file" accept=".json" (change)="onFileSelect($event)"
+        #fileInput style="display:none">
+
+      <button mat-raised-button color="accent" (click)="fileInput.click()">
+        <mat-icon>attach_file</mat-icon> Seleccionar archivo JSON
+      </button>
+
+      @if (importResult(); as r) {
+        <div class="import-result success">
+          <mat-icon>check_circle</mat-icon>
+          <span>Importación exitosa: <strong>{{ r.added }}</strong> casos agregados, <strong>{{ r.skipped }}</strong> duplicados omitidos.</span>
+        </div>
+      }
+
+      @if (importError()) {
+        <div class="import-result error">
+          <mat-icon>error</mat-icon>
+          <span>{{ importError() }}</span>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
