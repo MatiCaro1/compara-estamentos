@@ -1,0 +1,102 @@
+<div class="lista-funcionarios">
+  <div class="page-header">
+    <h2 class="page-title">Funcionarios Captados</h2>
+    <button mat-raised-button color="primary" routerLink="/funcionarios/nuevo">
+      <mat-icon>person_add</mat-icon> Registrar Funcionario
+    </button>
+  </div>
+
+  <!-- Filtros -->
+  <mat-card class="filtros-card">
+    <mat-card-content>
+      <div class="filtros-row">
+        <mat-form-field appearance="outline" class="filtro-search">
+          <mat-label>Buscar por nombre, RUT, unidad o dirigente</mat-label>
+          <input matInput [ngModel]="filtroBusqueda()" (ngModelChange)="filtroBusqueda.set($event)" placeholder="Buscar...">
+          <mat-icon matPrefix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Estamento</mat-label>
+          <mat-select [ngModel]="filtroEstamento()" (ngModelChange)="filtroEstamento.set($event)">
+            <mat-option value="">Todos</mat-option>
+            @for (e of estamentos; track e) {
+              <mat-option [value]="e">{{ e }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-button (click)="limpiarFiltros()" [disabled]="!filtroEstamento() && !filtroBusqueda()">
+          <mat-icon>clear</mat-icon> Limpiar
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <p class="result-count">{{ filtrados().length }} funcionario(s) encontrado(s)</p>
+
+  @if (filtrados().length === 0) {
+    <mat-card class="empty-state">
+      <mat-card-content>
+        <mat-icon>group_off</mat-icon>
+        <p>No hay funcionarios captados registrados aún.</p>
+        <button mat-raised-button color="primary" routerLink="/funcionarios/nuevo">
+          <mat-icon>person_add</mat-icon> Registrar el primero
+        </button>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <mat-card class="table-card">
+      <table mat-table [dataSource]="filtrados()" class="mat-elevation-z0">
+
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef>Funcionario</th>
+          <td mat-cell *matCellDef="let f">
+            <div class="nombre-cell">
+              <strong>{{ f.nombre }}</strong>
+              @if (f.rut) { <small>{{ f.rut }}</small> }
+              @if (f.unidad) { <small class="unidad">{{ f.unidad }}</small> }
+              @if (f.email) { <small class="contacto">{{ f.email }}</small> }
+              @if (f.telefono) { <small class="contacto">{{ f.telefono }}</small> }
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="estamento">
+          <th mat-header-cell *matHeaderCellDef>Estamento / Grado</th>
+          <td mat-cell *matCellDef="let f">
+            <span class="estamento-badge">{{ f.estamento }}</span>
+            <span class="grado">G{{ f.grado }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="captacion">
+          <th mat-header-cell *matHeaderCellDef>Fecha Captación</th>
+          <td mat-cell *matCellDef="let f">{{ f.fecha_captacion | date:'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="dirigente">
+          <th mat-header-cell *matHeaderCellDef>Dirigente Captador</th>
+          <td mat-cell *matCellDef="let f">
+            <span class="dirigente">{{ f.dirigente_captador || '—' }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let f">
+            <button mat-icon-button [routerLink]="['/funcionarios', f.id, 'editar']" matTooltip="Editar">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="eliminar(f)" matTooltip="Eliminar">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="fila-row"></tr>
+      </table>
+    </mat-card>
+  }
+</div>

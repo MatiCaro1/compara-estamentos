@@ -47,6 +47,21 @@ export interface Caso {
   descripcion_docs?: string;
 }
 
+export interface Funcionario {
+  id: string;
+  fecha_captacion: string;
+  fecha_actualizacion: string;
+  nombre: string;
+  rut?: string;
+  email?: string;
+  telefono?: string;
+  unidad?: string;
+  estamento: Estamento;
+  grado: number;
+  dirigente_captador?: string;
+  notas?: string;
+}
+
 export interface AppState {
   casos: Caso[];
   escala: EscalaRow[];

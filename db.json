@@ -1,7 +1,7 @@
 {
   "casos": [
     {
-      "nombre": "Valentina Ordenes",
+      "nombre": "VALENTINA ORDENES",
       "unidad": "DPDE - SIAC",
       "estamento_actual": "Administrativo",
       "grado_actual": 17,
@@ -16,12 +16,77 @@
       "tiene_documentacion": false,
       "id": "e5d66e01-73f3-4615-8d43-e4c42dfd7030",
       "fecha_ingreso": "2026-06-08T16:32:57.615Z",
-      "fecha_actualizacion": "2026-06-08T16:32:57.615Z"
+      "fecha_actualizacion": "2026-06-15T15:56:49.994Z",
+      "rut": "19421330-1"
+    },
+    {
+      "nombre": "ELIZABETH SÁNCHEZ VENEGAS",
+      "rut": "15736034-5",
+      "unidad": "DPDE - SIAC",
+      "estamento_actual": "Administrativo",
+      "grado_actual": 17,
+      "estamento_solicitado": "Administrativo",
+      "grado_solicitado": 16,
+      "diff_mensual": 388211,
+      "diff_anual": 4658532,
+      "pct_incremento": 26.52152883195173,
+      "estado": "en_gestion",
+      "fundamento_legal": "art_5_ley19296",
+      "notas": [],
+      "tiene_documentacion": true,
+      "descripcion_docs": "Solicitar documentos de respaldo",
+      "id": "ce2b20e8-4d38-49d0-83f4-b96b12633974",
+      "fecha_ingreso": "2026-06-15T15:48:40.398Z",
+      "fecha_actualizacion": "2026-06-15T15:59:03.457Z"
+    },
+    {
+      "nombre": "CARLA NUÑEZ GALLEGUILLOS",
+      "rut": "16642451-8",
+      "unidad": "DPDE - SIAC",
+      "estamento_actual": "Administrativo",
+      "grado_actual": 17,
+      "estamento_solicitado": "Administrativo",
+      "grado_solicitado": 16,
+      "diff_mensual": 388211,
+      "diff_anual": 4658532,
+      "pct_incremento": 26.52152883195173,
+      "estado": "en_gestion",
+      "fundamento_legal": "art_5_ley19296",
+      "notas": [],
+      "tiene_documentacion": true,
+      "descripcion_docs": "Solicitar documentos.",
+      "id": "d2743016-94a7-4e86-b493-0e5f316354f7",
+      "fecha_ingreso": "2026-06-15T15:49:49.921Z",
+      "fecha_actualizacion": "2026-06-15T15:59:14.198Z"
     }
   ],
   "metadata": {
     "version": "1.0.0",
-    "ultimo_export": "",
+    "ultimo_export": "2026-06-10T20:03:18.375Z",
     "dirigente_local": ""
-  }
+  },
+  "funcionarios": [
+    {
+      "nombre": "Matilda Catalina Carrasco Perez",
+      "email": "matilda.carrasco@supereduc.cl",
+      "unidad": "Asistente mesa de servicio unidad de infraestructura y soporte",
+      "estamento": "Auxiliar",
+      "grado": 21,
+      "dirigente_captador": "Thiare Carrasco Perez",
+      "id": "af717146-a831-4e47-a6e0-94249b91611b",
+      "fecha_captacion": "2026-06-15T16:19:54.062Z",
+      "fecha_actualizacion": "2026-06-15T16:21:10.687Z"
+    },
+    {
+      "nombre": "Catalina Belen Jerez Valdebenito",
+      "email": "catalina.jerez@supereduc.cl",
+      "unidad": "Analista de procesos declarativos de recursos",
+      "estamento": "Profesional",
+      "grado": 13,
+      "dirigente_captador": "Matías Caro Córdova",
+      "id": "66e34473-b5e1-4807-ad57-bfd227355220",
+      "fecha_captacion": "2026-06-15T16:20:56.690Z",
+      "fecha_actualizacion": "2026-06-15T16:20:56.690Z"
+    }
+  ]
 }

@@ -33,5 +33,17 @@ export const routes: Routes = [
     path: 'exportar',
     loadComponent: () => import('./shared/components/export-import/export-import.component').then(m => m.ExportImportComponent),
   },
+  {
+    path: 'funcionarios',
+    loadComponent: () => import('./features/funcionarios/lista-funcionarios/lista-funcionarios.component').then(m => m.ListaFuncionariosComponent),
+  },
+  {
+    path: 'funcionarios/nuevo',
+    loadComponent: () => import('./features/funcionarios/formulario-funcionario/formulario-funcionario.component').then(m => m.FormularioFuncionarioComponent),
+  },
+  {
+    path: 'funcionarios/:id/editar',
+    loadComponent: () => import('./features/funcionarios/formulario-funcionario/formulario-funcionario.component').then(m => m.FormularioFuncionarioComponent),
+  },
   { path: '**', redirectTo: '' },
 ];
