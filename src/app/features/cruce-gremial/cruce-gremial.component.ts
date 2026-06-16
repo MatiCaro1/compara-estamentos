@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CruceGremialService } from '../../core/services/cruce-gremial.service';
 import { CruceGremialRow } from '../../core/models/types';
@@ -20,7 +21,7 @@ import { CruceGremialRow } from '../../core/models/types';
     FormsModule, DatePipe, CurrencyPipe,
     MatCardModule, MatButtonModule, MatIconModule, MatTableModule,
     MatSelectModule, MatFormFieldModule, MatInputModule, MatChipsModule,
-    MatSnackBarModule,
+    MatTooltipModule, MatSnackBarModule,
   ],
   templateUrl: './cruce-gremial.component.html',
   styleUrl: './cruce-gremial.component.scss',
@@ -31,20 +32,39 @@ export class CruceGremialComponent {
 
   readonly state = this.svc.getState();
   readonly filtroEstado = signal<string>('');
+  readonly filtroEstamento = signal<string>('');
+  readonly filtroGrado = signal<number | null>(null);
   readonly filtroBusqueda = signal('');
   readonly errorImport = signal('');
 
   readonly estadosDisponibles = computed(() => {
     const estados = new Set(this.state().filas.map(f => f.estado_cruce ?? ''));
-    return Array.from(estados).filter(e => e);
+    return Array.from(estados).filter(e => e).sort();
+  });
+
+  readonly estamentosDisponibles = computed(() => {
+    const estamentos = new Set(this.state().filas.map(f => f.estamento ?? ''));
+    return Array.from(estamentos).filter(e => e).sort();
+  });
+
+  readonly gradosDisponibles = computed(() => {
+    const estamento = this.filtroEstamento();
+    let filas = this.state().filas;
+    if (estamento) filas = filas.filter(f => f.estamento === estamento);
+    const grados = new Set(filas.map(f => f.grado).filter(g => g !== undefined && g !== null) as number[]);
+    return Array.from(grados).sort((a, b) => a - b);
   });
 
   readonly filtrados = computed(() => {
     let list = this.state().filas;
     const estado = this.filtroEstado();
+    const estamento = this.filtroEstamento();
+    const grado = this.filtroGrado();
     const busqueda = this.filtroBusqueda().toLowerCase();
 
     if (estado) list = list.filter(f => (f.estado_cruce ?? '') === estado);
+    if (estamento) list = list.filter(f => f.estamento === estamento);
+    if (grado !== null) list = list.filter(f => f.grado === grado);
     if (busqueda) list = list.filter(f =>
       (f.rut ?? '').toLowerCase().includes(busqueda) ||
       (f.nombre_unesie ?? '').toLowerCase().includes(busqueda) ||
@@ -55,6 +75,13 @@ export class CruceGremialComponent {
   });
 
   readonly displayedColumns = ['rut', 'nombre_unesie', 'estamento', 'cargo', 'cuota_gremial_estimada', 'estado_cruce'];
+
+  hayFiltrosActivos = computed(() => {
+    return this.filtroEstado() !== '' ||
+           this.filtroEstamento() !== '' ||
+           this.filtroGrado() !== null ||
+           this.filtroBusqueda() !== '';
+  });
 
   onFileSelect(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -82,6 +109,8 @@ export class CruceGremialComponent {
 
   limpiarFiltros(): void {
     this.filtroEstado.set('');
+    this.filtroEstamento.set('');
+    this.filtroGrado.set(null);
     this.filtroBusqueda.set('');
   }
 

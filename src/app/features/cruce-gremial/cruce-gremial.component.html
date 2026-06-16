@@ -34,11 +34,16 @@
   } @else {
     <!-- Resumen -->
     <mat-card class="resumen-card">
-      <mat-card-header>
-        <mat-card-title>Resumen del Cruce</mat-card-title>
-        <span class="fecha-import">
-          Importado: {{ state().fecha_importacion | date:'dd/MM/yyyy HH:mm' }}
-        </span>
+      <mat-card-header class="resumen-header">
+        <div class="resumen-header-left">
+          <mat-card-title>Resumen del Cruce</mat-card-title>
+          <span class="fecha-import">
+            Importado: {{ state().fecha_importacion | date:'dd/MM/yyyy HH:mm' }}
+          </span>
+        </div>
+        <button mat-icon-button color="warn" (click)="limpiar()" matTooltip="Limpiar todos los datos" class="resumen-btn-limpiar">
+          <mat-icon>delete</mat-icon>
+        </button>
       </mat-card-header>
       @if (state().resumen) {
         <mat-card-content class="resumen-grid">
@@ -77,7 +82,7 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Estado del Cruce</mat-label>
+            <mat-label>Estado</mat-label>
             <mat-select [ngModel]="filtroEstado()" (ngModelChange)="filtroEstado.set($event)">
               <mat-option value="">Todos</mat-option>
               @for (e of estadosDisponibles(); track e) {
@@ -86,7 +91,27 @@
             </mat-select>
           </mat-form-field>
 
-          <button mat-button (click)="limpiarFiltros()" [disabled]="!filtroEstado() && !filtroBusqueda()">
+          <mat-form-field appearance="outline">
+            <mat-label>Estamento</mat-label>
+            <mat-select [ngModel]="filtroEstamento()" (ngModelChange)="filtroEstamento.set($event); filtroGrado.set(null)">
+              <mat-option value="">Todos</mat-option>
+              @for (e of estamentosDisponibles(); track e) {
+                <mat-option [value]="e">{{ e }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Grado</mat-label>
+            <mat-select [ngModel]="filtroGrado()" (ngModelChange)="filtroGrado.set($event)" [disabled]="!filtroEstamento()">
+              <mat-option [value]="null">Todos</mat-option>
+              @for (g of gradosDisponibles(); track g) {
+                <mat-option [value]="g">{{ g }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <button mat-button (click)="limpiarFiltros()" [disabled]="!hayFiltrosActivos()">
             <mat-icon>clear</mat-icon> Limpiar
           </button>
         </div>
@@ -152,12 +177,5 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="socio-row"></tr>
       </table>
     </mat-card>
-
-    <!-- Acciones finales -->
-    <div class="form-actions">
-      <button mat-button type="button" color="warn" (click)="limpiar()">
-        <mat-icon>delete</mat-icon> Limpiar datos
-      </button>
-    </div>
   }
 </div>
