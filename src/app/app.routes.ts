@@ -45,5 +45,9 @@ export const routes: Routes = [
     path: 'funcionarios/:id/editar',
     loadComponent: () => import('./features/funcionarios/formulario-funcionario/formulario-funcionario.component').then(m => m.FormularioFuncionarioComponent),
   },
+  {
+    path: 'cruce-gremial',
+    loadComponent: () => import('./features/cruce-gremial/cruce-gremial.component').then(m => m.CruceGremialComponent),
+  },
   { path: '**', redirectTo: '' },
 ];

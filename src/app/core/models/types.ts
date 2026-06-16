@@ -62,6 +62,44 @@ export interface Funcionario {
   notas?: string;
 }
 
+export interface CruceGremialRow {
+  rut: string;
+  nombre_unesie: string;
+  correo_electronico?: string;
+  calidad_juridica?: string;
+  unidad_desempenio?: string;
+  nombre_transparencia?: string;
+  origen_transparencia?: string;
+  estamento?: string;
+  grado?: number;
+  calificacion_profesional?: string;
+  cargo?: string;
+  rem_bruta_transparencia?: number;
+  he_diurnas?: number;
+  he_nocturnas?: number;
+  he_festivas?: number;
+  rem_bruta_escala?: number;
+  incremento_previsional_dl3501?: number;
+  base_imponible_previsional?: number;
+  cuota_gremial_estimada?: number;
+  estado_cruce?: string;
+  score_similitud_fuzzy?: number;
+}
+
+export interface CruceGremialResumen {
+  total_socios: number;
+  exactos: number;
+  fuzzy: number;
+  no_encontrados: number;
+  recaudacion_proyectada: number;
+}
+
+export interface CruceGremialState {
+  fecha_importacion: string;
+  resumen: CruceGremialResumen | null;
+  filas: CruceGremialRow[];
+}
+
 export interface AppState {
   casos: Caso[];
   escala: EscalaRow[];

@@ -1,0 +1,163 @@
+<div class="cruce-gremial">
+  <div class="page-header">
+    <h2 class="page-title">Cruce Gremial — Socios UNESIE</h2>
+    <div class="header-actions">
+      <label mat-raised-button color="primary" class="import-label">
+        <mat-icon>upload_file</mat-icon>
+        Importar resultado_cruce_gremio.xlsx
+        <input type="file" accept=".xlsx,.xls" hidden (change)="onFileSelect($event)">
+      </label>
+    </div>
+  </div>
+
+  @if (errorImport()) {
+    <mat-card class="error-card">
+      <mat-card-content>
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorImport() }}</span>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  @if (state().filas.length === 0) {
+    <mat-card class="empty-state">
+      <mat-card-content>
+        <mat-icon>folder_open</mat-icon>
+        <p>No hay datos importados. Selecciona un archivo resultado_cruce_gremio.xlsx para comenzar.</p>
+        <label mat-raised-button color="primary">
+          <mat-icon>upload_file</mat-icon>
+          Seleccionar archivo
+          <input type="file" accept=".xlsx,.xls" hidden (change)="onFileSelect($event)">
+        </label>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <!-- Resumen -->
+    <mat-card class="resumen-card">
+      <mat-card-header>
+        <mat-card-title>Resumen del Cruce</mat-card-title>
+        <span class="fecha-import">
+          Importado: {{ state().fecha_importacion | date:'dd/MM/yyyy HH:mm' }}
+        </span>
+      </mat-card-header>
+      @if (state().resumen) {
+        <mat-card-content class="resumen-grid">
+          <div class="resumen-item">
+            <span class="resumen-label">Total Socios</span>
+            <span class="resumen-value">{{ state().resumen!.total_socios }}</span>
+          </div>
+          <div class="resumen-item exacto">
+            <span class="resumen-label">Exactos (encontrados)</span>
+            <span class="resumen-value">{{ state().resumen!.exactos }}</span>
+          </div>
+          <div class="resumen-item fuzzy">
+            <span class="resumen-label">Fuzzy (similitud)</span>
+            <span class="resumen-value">{{ state().resumen!.fuzzy }}</span>
+          </div>
+          <div class="resumen-item no-encontrados">
+            <span class="resumen-label">No encontrados</span>
+            <span class="resumen-value">{{ state().resumen!.no_encontrados }}</span>
+          </div>
+          <div class="resumen-item recaudacion">
+            <span class="resumen-label">Recaudación Proyectada</span>
+            <span class="resumen-value">{{ state().resumen!.recaudacion_proyectada | currency:'CLP':'$':'1.0-0' }}</span>
+          </div>
+        </mat-card-content>
+      }
+    </mat-card>
+
+    <!-- Filtros -->
+    <mat-card class="filtros-card">
+      <mat-card-content>
+        <div class="filtros-row">
+          <mat-form-field appearance="outline" class="filtro-search">
+            <mat-label>Buscar por RUT, nombre o correo</mat-label>
+            <input matInput [ngModel]="filtroBusqueda()" (ngModelChange)="filtroBusqueda.set($event)" placeholder="Buscar...">
+            <mat-icon matPrefix>search</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Estado del Cruce</mat-label>
+            <mat-select [ngModel]="filtroEstado()" (ngModelChange)="filtroEstado.set($event)">
+              <mat-option value="">Todos</mat-option>
+              @for (e of estadosDisponibles(); track e) {
+                <mat-option [value]="e">{{ e }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <button mat-button (click)="limpiarFiltros()" [disabled]="!filtroEstado() && !filtroBusqueda()">
+            <mat-icon>clear</mat-icon> Limpiar
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <p class="result-count">{{ filtrados().length }} de {{ state().filas.length }} socio(s)</p>
+
+    <!-- Tabla -->
+    <mat-card class="table-card">
+      <table mat-table [dataSource]="filtrados()" class="mat-elevation-z0">
+
+        <ng-container matColumnDef="rut">
+          <th mat-header-cell *matHeaderCellDef>RUT</th>
+          <td mat-cell *matCellDef="let f">{{ f.rut }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="nombre_unesie">
+          <th mat-header-cell *matHeaderCellDef>Nombre (UNESIE)</th>
+          <td mat-cell *matCellDef="let f">
+            <div class="nombre-cell">
+              <strong>{{ f.nombre_unesie }}</strong>
+              @if (f.correo_electronico) { <small>{{ f.correo_electronico }}</small> }
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="estamento">
+          <th mat-header-cell *matHeaderCellDef>Estamento / Grado</th>
+          <td mat-cell *matCellDef="let f">
+            <span class="estamento-badge">{{ f.estamento }}</span>
+            @if (f.grado) { <span class="grado">G{{ f.grado }}</span> }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cargo">
+          <th mat-header-cell *matHeaderCellDef>Cargo</th>
+          <td mat-cell *matCellDef="let f">
+            <span class="cargo-text">{{ f.cargo || '—' }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cuota_gremial_estimada">
+          <th mat-header-cell *matHeaderCellDef>Cuota Estimada</th>
+          <td mat-cell *matCellDef="let f">
+            <span class="cuota">{{ f.cuota_gremial_estimada | currency:'CLP':'$':'1.0-0' }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="estado_cruce">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let f">
+            <span class="estado-badge" [style.background]="estadoColor(f.estado_cruce)">
+              {{ f.estado_cruce || '?' }}
+            </span>
+            @if (f.score_similitud_fuzzy) {
+              <small class="score">{{ (f.score_similitud_fuzzy * 100).toFixed(0) }}%</small>
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="socio-row"></tr>
+      </table>
+    </mat-card>
+
+    <!-- Acciones finales -->
+    <div class="form-actions">
+      <button mat-button type="button" color="warn" (click)="limpiar()">
+        <mat-icon>delete</mat-icon> Limpiar datos
+      </button>
+    </div>
+  }
+</div>

@@ -1,0 +1,188 @@
+.cruce-gremial { padding: 24px; }
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin: 0;
+  color: #37474f;
+}
+
+.header-actions { display: flex; gap: 12px; }
+
+.import-label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.error-card {
+  background: #ffebee;
+  border-left: 4px solid #f44336;
+  margin-bottom: 16px;
+  mat-card-content {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    color: #c62828;
+    mat-icon { color: #f44336; }
+  }
+}
+
+.resumen-card { margin-bottom: 16px; }
+
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.fecha-import {
+  font-size: 0.75rem;
+  color: #9e9e9e;
+}
+
+.resumen-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.resumen-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 16px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  text-align: center;
+
+  &.exacto { background: #e8f5e9; }
+  &.fuzzy { background: #fff3e0; }
+  &.no-encontrados { background: #ffebee; }
+  &.recaudacion { background: #e3f2fd; }
+}
+
+.resumen-label {
+  font-size: 0.78rem;
+  color: #757575;
+  margin-bottom: 6px;
+}
+
+.resumen-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #424242;
+
+  .resumen-item.exacto & { color: #2e7d32; }
+  .resumen-item.fuzzy & { color: #e65100; }
+  .resumen-item.no-encontrados & { color: #c62828; }
+  .resumen-item.recaudacion & { color: #1565c0; }
+}
+
+.filtros-card { margin-bottom: 16px; }
+
+.filtros-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding-top: 8px;
+}
+
+.filtro-search { flex: 1; min-width: 200px; }
+
+.result-count {
+  color: #757575;
+  font-size: 0.85rem;
+  margin: 0 0 12px;
+}
+
+.table-card { overflow: hidden; }
+
+table { width: 100%; }
+
+.nombre-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 0;
+  strong { color: #37474f; }
+  small { color: #757575; font-size: 0.78rem; }
+}
+
+.estamento-badge {
+  display: inline-block;
+  background: #e8eaf6;
+  color: #3949ab;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+}
+
+.grado {
+  font-size: 0.85rem;
+  color: #546e7a;
+  font-weight: 500;
+}
+
+.cargo-text {
+  font-size: 0.85rem;
+  color: #455a64;
+}
+
+.cuota {
+  font-weight: 600;
+  color: #1565c0;
+  font-size: 0.95rem;
+}
+
+.estado-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  margin-right: 6px;
+}
+
+.score {
+  font-size: 0.7rem;
+  color: #757575;
+  font-style: italic;
+}
+
+.socio-row:hover { background: #f5f5f5; }
+
+.empty-state {
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    gap: 16px;
+    color: #9e9e9e;
+    mat-icon { font-size: 3rem; width: 3rem; height: 3rem; }
+    p { margin: 0; }
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px;
+  padding-top: 16px;
+}
