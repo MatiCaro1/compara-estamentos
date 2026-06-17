@@ -1,10 +1,11 @@
 {
   "permissions": {
+    "allow": [
+      "Bash(python -m py_compile cruce_gremial_unesie.py)",
+      "Bash(python actualizar_cruce.py)"
+    ],
     "additionalDirectories": [
       "c:\\Users\\matias.caro\\workspace\\cruce-gremial"
-    ],
-    "allow": [
-      "Bash(python -m py_compile cruce_gremial_unesie.py)"
     ]
   }
 }
