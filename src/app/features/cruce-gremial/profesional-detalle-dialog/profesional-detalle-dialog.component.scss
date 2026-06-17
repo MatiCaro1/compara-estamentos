@@ -1,0 +1,96 @@
+.detalle-profesional {
+  padding: 20px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+}
+
+.info-section {
+  margin-bottom: 20px;
+}
+
+.info-section mat-card-header {
+  margin-bottom: 16px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 12px;
+}
+
+.info-section mat-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1976d2;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.value {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.cuota-value {
+  font-size: 18px;
+  color: #1976d2;
+  font-weight: 700;
+}
+
+.estamento-badge {
+  display: inline-block;
+  background-color: #e3f2fd;
+  color: #1976d2;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.estado-badge {
+  display: inline-block;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+@media (max-width: 600px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detalle-profesional {
+    padding: 12px;
+  }
+}

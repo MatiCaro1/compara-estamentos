@@ -1,0 +1,172 @@
+<div class="detalle-profesional">
+  <h2 mat-dialog-title>{{ data.nombre_unesie }}</h2>
+
+  <!-- Datos Personales -->
+  <mat-card class="info-section">
+    <mat-card-header>
+      <mat-card-title>Datos Personales</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="info-grid">
+        @if (data.rut) {
+          <div class="info-item">
+            <span class="label">RUT:</span>
+            <span class="value">{{ data.rut }}</span>
+          </div>
+        }
+        @if (data.correo_electronico) {
+          <div class="info-item">
+            <span class="label">Correo:</span>
+            <span class="value">{{ data.correo_electronico }}</span>
+          </div>
+        }
+        @if (data.calidad_juridica) {
+          <div class="info-item">
+            <span class="label">Calidad Jurídica:</span>
+            <span class="value">{{ data.calidad_juridica }}</span>
+          </div>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Información Laboral -->
+  <mat-card class="info-section">
+    <mat-card-header>
+      <mat-card-title>Información Laboral</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Unidad:</span>
+          <span class="value">{{ data.unidad_desempenio || '—' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Estamento:</span>
+          <span class="value">
+            <span class="estamento-badge">{{ data.estamento || '—' }}</span>
+          </span>
+        </div>
+        <div class="info-item">
+          <span class="label">Grado:</span>
+          <span class="value">{{ data.grado ? 'G' + data.grado : '—' }}</span>
+        </div>
+        @if (data.cargo) {
+          <div class="info-item">
+            <span class="label">Cargo:</span>
+            <span class="value">{{ data.cargo }}</span>
+          </div>
+        }
+        @if (data.calificacion_profesional) {
+          <div class="info-item">
+            <span class="label">Calificación:</span>
+            <span class="value">{{ data.calificacion_profesional }}</span>
+          </div>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Remuneraciones -->
+  <mat-card class="info-section">
+    <mat-card-header>
+      <mat-card-title>Remuneraciones</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="info-grid">
+        @if (data.rem_bruta_transparencia) {
+          <div class="info-item">
+            <span class="label">Rem. Bruta (Transparencia):</span>
+            <span class="value">{{ data.rem_bruta_transparencia | currency:'CLP':'$':'1.0-0' }}</span>
+          </div>
+        }
+        @if (data.rem_bruta_escala) {
+          <div class="info-item">
+            <span class="label">Rem. Bruta (Escala):</span>
+            <span class="value">{{ data.rem_bruta_escala | currency:'CLP':'$':'1.0-0' }}</span>
+          </div>
+        }
+        @if (data.he_diurnas) {
+          <div class="info-item">
+            <span class="label">HE Diurnas:</span>
+            <span class="value">{{ data.he_diurnas }}</span>
+          </div>
+        }
+        @if (data.he_nocturnas) {
+          <div class="info-item">
+            <span class="label">HE Nocturnas:</span>
+            <span class="value">{{ data.he_nocturnas }}</span>
+          </div>
+        }
+        @if (data.he_festivas) {
+          <div class="info-item">
+            <span class="label">HE Festivas:</span>
+            <span class="value">{{ data.he_festivas }}</span>
+          </div>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Información Previsional -->
+  <mat-card class="info-section">
+    <mat-card-header>
+      <mat-card-title>Información Previsional</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="info-grid">
+        @if (data.base_imponible_previsional) {
+          <div class="info-item">
+            <span class="label">Base Imponible:</span>
+            <span class="value">{{ data.base_imponible_previsional | currency:'CLP':'$':'1.0-0' }}</span>
+          </div>
+        }
+        @if (data.incremento_previsional_dl3501) {
+          <div class="info-item">
+            <span class="label">Incremento DL 3501:</span>
+            <span class="value">{{ data.incremento_previsional_dl3501 | currency:'CLP':'$':'1.0-0' }}</span>
+          </div>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Cuota Gremial -->
+  <mat-card class="info-section">
+    <mat-card-header>
+      <mat-card-title>Cuota Gremial</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Cuota Estimada:</span>
+          <span class="value cuota-value">
+            {{ data.cuota_gremial_estimada | currency:'CLP':'$':'1.0-0' }}
+          </span>
+        </div>
+        <div class="info-item">
+          <span class="label">Estado del Cruce:</span>
+          <span class="value">
+            <span class="estado-badge" [style.background]="estadoColor(data.estado_cruce)">
+              {{ data.estado_cruce || '?' }}
+            </span>
+          </span>
+        </div>
+        @if (data.score_similitud_fuzzy) {
+          <div class="info-item">
+            <span class="label">Score Similitud:</span>
+            <span class="value">{{ (data.score_similitud_fuzzy * 100).toFixed(0) }}%</span>
+          </div>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Acciones -->
+  <div class="dialog-actions">
+    <button mat-raised-button color="primary" [mat-dialog-close]="true">
+      <mat-icon>close</mat-icon>
+      Cerrar
+    </button>
+  </div>
+</div>

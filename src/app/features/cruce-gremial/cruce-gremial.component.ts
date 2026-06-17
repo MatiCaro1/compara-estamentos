@@ -11,8 +11,34 @@ import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { CruceGremialService } from '../../core/services/cruce-gremial.service';
 import { CruceGremialRow } from '../../core/models/types';
+import { ProfesionalDetalleDialogComponent } from './profesional-detalle-dialog/profesional-detalle-dialog.component';
+import { viewChild, effect } from '@angular/core';
+
+/**
+ * Función para traducir las etiquetas del paginador a español
+ */
+export function getSpanishPaginatorIntl() {
+  const paginatorIntl = new MatPaginatorIntl();
+  paginatorIntl.itemsPerPageLabel = 'Elementos por página:';
+  paginatorIntl.nextPageLabel = 'Siguiente página';
+  paginatorIntl.previousPageLabel = 'Página anterior';
+  paginatorIntl.firstPageLabel = 'Primera página';
+  paginatorIntl.lastPageLabel = 'Última página';
+  paginatorIntl.getRangeLabel = (page: number, pageSize: number, length: number) => {
+    if (length === 0 || pageSize === 0) return `0 de ${length}`;
+    length = Math.max(length, 0);
+    const startIndex = page * pageSize;
+    const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
+    return `${startIndex + 1} - ${endIndex} de ${length}`;
+  };
+  return paginatorIntl;
+}
 
 @Component({
   selector: 'app-cruce-gremial',
@@ -21,7 +47,11 @@ import { CruceGremialRow } from '../../core/models/types';
     FormsModule, DatePipe, CurrencyPipe,
     MatCardModule, MatButtonModule, MatIconModule, MatTableModule,
     MatSelectModule, MatFormFieldModule, MatInputModule, MatChipsModule,
-    MatTooltipModule, MatSnackBarModule,
+    MatTooltipModule, MatSnackBarModule, MatDialogModule,
+    MatPaginatorModule, MatSortModule,
+  ],
+  providers: [
+    { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() }
   ],
   templateUrl: './cruce-gremial.component.html',
   styleUrl: './cruce-gremial.component.scss',
@@ -29,6 +59,10 @@ import { CruceGremialRow } from '../../core/models/types';
 export class CruceGremialComponent {
   private svc = inject(CruceGremialService);
   private snack = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
+
+  readonly paginator = viewChild(MatPaginator);
+  readonly sort = viewChild(MatSort);
 
   readonly state = this.svc.getState();
   readonly filtroEstado = signal<string>('');
@@ -36,6 +70,21 @@ export class CruceGremialComponent {
   readonly filtroGrado = signal<number | null>(null);
   readonly filtroBusqueda = signal('');
   readonly errorImport = signal('');
+
+  readonly dataSource = new MatTableDataSource<CruceGremialRow>([]);
+
+  constructor() {
+    effect(() => {
+      const data = this.filtrados();
+      this.dataSource.data = data;
+      
+      const p = this.paginator();
+      if (p) this.dataSource.paginator = p;
+      
+      const s = this.sort();
+      if (s) this.dataSource.sort = s;
+    });
+  }
 
   readonly estadosDisponibles = computed(() => {
     const estados = new Set(this.state().filas.map(f => f.estado_cruce ?? ''));
@@ -119,5 +168,14 @@ export class CruceGremialComponent {
     if (estado.toLowerCase() === 'exacto') return '#4caf50';
     if (estado.toLowerCase() === 'fuzzy') return '#ff9800';
     return '#f44336';
+  }
+
+  verDetalle(fila: CruceGremialRow): void {
+    this.dialog.open(ProfesionalDetalleDialogComponent, {
+      data: fila,
+      width: '600px',
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+    });
   }
 }

@@ -92,6 +92,7 @@ export interface CruceGremialResumen {
   fuzzy: number;
   no_encontrados: number;
   recaudacion_proyectada: number;
+  recaudacion_anual_proyectada: number;
 }
 
 export interface CruceGremialState {

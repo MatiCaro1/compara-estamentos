@@ -80,6 +80,7 @@
   &.fuzzy { background: #fff3e0; }
   &.no-encontrados { background: #ffebee; }
   &.recaudacion { background: #e3f2fd; }
+  &.recaudacion-anual { background: #f3e5f5; }
 }
 
 .resumen-label {
@@ -97,6 +98,7 @@
   .resumen-item.fuzzy & { color: #e65100; }
   .resumen-item.no-encontrados & { color: #c62828; }
   .resumen-item.recaudacion & { color: #1565c0; }
+  .resumen-item.recaudacion-anual & { color: #7b1fa2; }
 }
 
 .filtros-card { margin-bottom: 16px; }
@@ -126,9 +128,21 @@
   margin: 0 0 12px;
 }
 
-.table-card { overflow: hidden; }
+.table-card { 
+  overflow: hidden; 
+  padding: 0;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
 
 table { width: 100%; }
+
+mat-paginator {
+  border-top: 1px solid #f0f0f0;
+}
 
 .nombre-cell {
   display: flex;
@@ -184,7 +198,14 @@ table { width: 100%; }
   font-style: italic;
 }
 
-.socio-row:hover { background: #f5f5f5; }
+.socio-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+}
 
 .empty-state {
   mat-card-content {

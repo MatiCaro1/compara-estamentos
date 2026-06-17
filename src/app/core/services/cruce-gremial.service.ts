@@ -54,7 +54,13 @@ export class CruceGremialService {
     if (stored) {
       try {
         const parsed = JSON.parse(stored) as CruceGremialState;
-        if (parsed && Array.isArray(parsed.filas)) this._state.set(parsed);
+        if (parsed && Array.isArray(parsed.filas)) {
+          // Re-calculamos el resumen para asegurar que campos nuevos (como recaudación anual)
+          // estén presentes incluso si los datos se guardaron antes de la actualización.
+          parsed.resumen = this.calcularResumen(parsed.filas);
+          this._state.set(parsed);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+        }
       } catch {}
     }
   }
@@ -122,6 +128,7 @@ export class CruceGremialService {
       fuzzy,
       no_encontrados: filas.length - exactos - fuzzy,
       recaudacion_proyectada,
+      recaudacion_anual_proyectada: recaudacion_proyectada * 12,
     };
   }
 }
