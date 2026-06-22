@@ -49,5 +49,9 @@ export const routes: Routes = [
     path: 'cruce-gremial',
     loadComponent: () => import('./features/cruce-gremial/cruce-gremial.component').then(m => m.CruceGremialComponent),
   },
+  {
+    path: 'rrhh',
+    loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardRrhhComponent),
+  },
   { path: '**', redirectTo: '' },
 ];

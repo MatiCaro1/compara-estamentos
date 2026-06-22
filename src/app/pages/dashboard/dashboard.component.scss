@@ -1,0 +1,274 @@
+.rrhh-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+// ── Encabezado ──────────────────────────────────────────────
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mat-app-on-surface, #1a1a1a);
+
+  mat-icon {
+    font-size: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.page-subtitle {
+  display: block;
+  margin-top: 4px;
+  color: var(--mat-app-on-surface-variant, #666);
+  font-size: 0.875rem;
+}
+
+// ── KPI Grid ─────────────────────────────────────────────────
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 500px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kpi-card {
+  text-align: center;
+
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 20px 16px 16px;
+  }
+}
+
+.kpi-icon {
+  font-size: 2rem;
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 4px;
+
+  &.kpi-icon-total    { color: #1976d2; }
+  &.kpi-icon-elegible { color: #2e7d32; }
+  &.kpi-icon-evaluacion { color: #f57f17; }
+  &.kpi-icon-mujeres  { color: #7b1fa2; }
+}
+
+.kpi-value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.kpi-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--mat-app-on-surface-variant, #666);
+}
+
+// ── Dos columnas ─────────────────────────────────────────────
+.two-col-grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 24px;
+  align-items: start;
+
+  @media (max-width: 1000px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Sección genérica ─────────────────────────────────────────
+.section-card {
+  mat-card-header {
+    margin-bottom: 8px;
+  }
+}
+
+.title-icon {
+  vertical-align: middle;
+  margin-right: 6px;
+  font-size: 1.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+
+  &.icon-elegible  { color: #2e7d32; }
+  &.icon-cumple    { color: #e65100; }
+}
+
+// ── Tablas ───────────────────────────────────────────────────
+.table-container {
+  overflow-x: auto;
+}
+
+.table-container-scroll {
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+.col-center {
+  text-align: center;
+}
+
+.col-mono {
+  font-family: monospace;
+  font-size: 0.85em;
+}
+
+.no-data-cell {
+  padding: 32px;
+  text-align: center;
+  color: var(--mat-app-on-surface-variant, #888);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  mat-icon {
+    font-size: 1.2rem;
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}
+
+// ── Filtros ──────────────────────────────────────────────────
+.filtros-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.filtro-busqueda {
+  flex: 1 1 260px;
+  min-width: 200px;
+}
+
+.filtro-select {
+  flex: 0 1 200px;
+  min-width: 160px;
+}
+
+.clear-btn {
+  margin-top: 4px;
+  align-self: center;
+}
+
+// ── Cumpleaños ───────────────────────────────────────────────
+.cumple-scroll {
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.cumple-item {
+  height: auto !important;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.cumple-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #fff3e0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.cumple-dia {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #e65100;
+}
+
+.cumple-mes {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: #bf360c;
+  letter-spacing: 0.03em;
+}
+
+// ── Badges de elegibilidad ───────────────────────────────────
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badge-elegible {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+.badge-no-elegible {
+  background: #ffebee;
+  color: #b71c1c;
+}
+
+.badge-evaluacion {
+  background: #fff8e1;
+  color: #e65100;
+}
+
+.badge-sin-datos {
+  background: #f5f5f5;
+  color: #616161;
+}
+
+// ── Estado vacío ─────────────────────────────────────────────
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 32px 16px;
+  color: var(--mat-app-on-surface-variant, #888);
+  text-align: center;
+
+  mat-icon {
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+    opacity: 0.5;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+}

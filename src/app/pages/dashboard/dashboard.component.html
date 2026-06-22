@@ -1,0 +1,258 @@
+<div class="rrhh-container">
+
+  <!-- Encabezado -->
+  <div class="page-header">
+    <div class="page-header-text">
+      <h1 class="page-title">
+        <mat-icon>people_alt</mat-icon>
+        Dashboard RRHH
+      </h1>
+      <span class="page-subtitle">
+        Proceso: {{ metadata.fecha_proceso }} &nbsp;·&nbsp; Umbral elegibilidad: {{ metadata.umbral_elegibilidad_anios }} años
+      </span>
+    </div>
+  </div>
+
+  <!-- ── KPIs ── -->
+  <div class="kpi-grid">
+    <mat-card class="kpi-card">
+      <mat-card-content>
+        <mat-icon class="kpi-icon kpi-icon-total">people</mat-icon>
+        <div class="kpi-value">{{ metadata.total_funcionarios }}</div>
+        <div class="kpi-label">Total funcionarios</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="kpi-card">
+      <mat-card-content>
+        <mat-icon class="kpi-icon kpi-icon-elegible">verified</mat-icon>
+        <div class="kpi-value">{{ metadata.resumen['Elegible'] ?? 0 }}</div>
+        <div class="kpi-label">Elegibles</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="kpi-card">
+      <mat-card-content>
+        <mat-icon class="kpi-icon kpi-icon-evaluacion">pending</mat-icon>
+        <div class="kpi-value">{{ metadata.resumen['En Evaluación'] ?? 0 }}</div>
+        <div class="kpi-label">En evaluación</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="kpi-card">
+      <mat-card-content>
+        <mat-icon class="kpi-icon kpi-icon-mujeres">woman</mat-icon>
+        <div class="kpi-value">{{ porcentajeMujeres }}%</div>
+        <div class="kpi-label">Mujeres</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- ── Elegibles + Cumpleaños ── -->
+  <div class="two-col-grid">
+
+    <!-- Elegibles -->
+    <mat-card class="section-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon class="title-icon icon-elegible">verified</mat-icon>
+          Elegibles para cambio de grado
+        </mat-card-title>
+        <mat-card-subtitle>{{ elegibles.length }} funcionarios · por años sin cambio ↓</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        @if (elegibles.length === 0) {
+          <div class="empty-state">
+            <mat-icon>info_outline</mat-icon>
+            <p>No hay funcionarios elegibles.</p>
+          </div>
+        } @else {
+          <div class="table-container">
+            <table mat-table [dataSource]="elegibles" class="full-width-table">
+
+              <ng-container matColumnDef="nombre_completo">
+                <th mat-header-cell *matHeaderCellDef>Nombre</th>
+                <td mat-cell *matCellDef="let row">{{ row.nombre_completo }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="escalafon">
+                <th mat-header-cell *matHeaderCellDef>Escalafón</th>
+                <td mat-cell *matCellDef="let row">{{ row.escalafon ?? '—' }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="grado_actual">
+                <th mat-header-cell *matHeaderCellDef>Grado</th>
+                <td mat-cell *matCellDef="let row" class="col-center">{{ row.grado_actual ?? '—' }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="anios_sin_cambio">
+                <th mat-header-cell *matHeaderCellDef>Años sin cambio</th>
+                <td mat-cell *matCellDef="let row" class="col-center">
+                  <strong>{{ getAniosSinCambio(row) ?? '—' }}</strong>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="estado">
+                <th mat-header-cell *matHeaderCellDef>Estado</th>
+                <td mat-cell *matCellDef="let row">
+                  <span [class]="getBadgeClass(row.elegibilidad.estado)">{{ row.elegibilidad.estado }}</span>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="columnsElegibles"></tr>
+              <tr mat-row *matRowDef="let row; columns: columnsElegibles;"></tr>
+            </table>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Próximos cumpleaños -->
+    <mat-card class="section-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon class="title-icon icon-cumple">cake</mat-icon>
+          Próximos cumpleaños
+        </mat-card-title>
+        <mat-card-subtitle>{{ proximosCumpleanos.length }} en los próximos 90 días</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        @if (proximosCumpleanos.length === 0) {
+          <div class="empty-state">
+            <mat-icon>sentiment_satisfied_alt</mat-icon>
+            <p>Sin cumpleaños en los próximos 90 días.</p>
+          </div>
+        } @else {
+          <div class="cumple-scroll">
+            <mat-list>
+              @for (f of proximosCumpleanos; track f.rut) {
+                <mat-list-item class="cumple-item">
+                  <div matListItemAvatar class="cumple-avatar">
+                    <span class="cumple-dia">{{ f.proximo_cumpleanos.dia }}</span>
+                    <span class="cumple-mes">{{ getMes(f.proximo_cumpleanos.mes) }}</span>
+                  </div>
+                  <span matListItemTitle>{{ f.nombre_completo }}</span>
+                  <span matListItemLine>
+                    {{ f.escalafon ?? '' }}
+                    @if (f.proximo_cumpleanos.dias_restantes === 0) {
+                      · <strong>¡Hoy!</strong>
+                    } @else {
+                      · en {{ f.proximo_cumpleanos.dias_restantes }} días
+                    }
+                  </span>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+              }
+            </mat-list>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+
+  <!-- ── Tabla general ── -->
+  <mat-card class="section-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon class="title-icon">table_chart</mat-icon>
+        Nómina completa
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ dataSource.filteredData.length }} de {{ metadata.total_funcionarios }} funcionarios
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+
+      <div class="filtros-row">
+        <mat-form-field appearance="outline" class="filtro-busqueda">
+          <mat-label>Buscar por nombre</mat-label>
+          <input matInput [(ngModel)]="busqueda" (ngModelChange)="applyFilters()" placeholder="Escribe un nombre...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filtro-select">
+          <mat-label>Escalafón</mat-label>
+          <mat-select [(ngModel)]="filtroEscalafon" (ngModelChange)="applyFilters()">
+            <mat-option value="">Todos</mat-option>
+            @for (e of escalafones; track e) {
+              <mat-option [value]="e">{{ e }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filtro-select">
+          <mat-label>Estado elegibilidad</mat-label>
+          <mat-select [(ngModel)]="filtroEstado" (ngModelChange)="applyFilters()">
+            <mat-option value="">Todos</mat-option>
+            @for (e of estados; track e) {
+              <mat-option [value]="e">{{ e }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-stroked-button (click)="clearFilters()" class="clear-btn" [disabled]="!busqueda && !filtroEscalafon && !filtroEstado">
+          <mat-icon>clear_all</mat-icon> Limpiar filtros
+        </button>
+      </div>
+
+      <div class="table-container table-container-scroll">
+        <table mat-table [dataSource]="dataSource" matSort class="full-width-table">
+
+          <ng-container matColumnDef="nombre_completo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+            <td mat-cell *matCellDef="let row">{{ row.nombre_completo }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="rut">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>RUT</th>
+            <td mat-cell *matCellDef="let row" class="col-mono">{{ row.rut }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="escalafon">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Escalafón</th>
+            <td mat-cell *matCellDef="let row">{{ row.escalafon ?? '—' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="grado_actual">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Grado</th>
+            <td mat-cell *matCellDef="let row" class="col-center">{{ row.grado_actual ?? '—' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="calidad_juridica">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Calidad jurídica</th>
+            <td mat-cell *matCellDef="let row">{{ row.calidad_juridica ?? '—' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="anios_antiguedad">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Antigüedad</th>
+            <td mat-cell *matCellDef="let row" class="col-center">{{ row.anios_antiguedad ?? '—' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="estado">Estado</th>
+            <td mat-cell *matCellDef="let row">
+              <span [class]="getBadgeClass(row.elegibilidad.estado)"
+                    [matTooltip]="row.elegibilidad.advertencia ?? ''">
+                {{ row.elegibilidad.estado }}
+              </span>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnsGeneral; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnsGeneral;"></tr>
+          <tr *matNoDataRow>
+            <td [attr.colspan]="columnsGeneral.length" class="no-data-cell">
+              <mat-icon>search_off</mat-icon>
+              <span>No se encontraron funcionarios con los filtros aplicados.</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons aria-label="Paginación"></mat-paginator>
+
+    </mat-card-content>
+  </mat-card>
+
+</div>

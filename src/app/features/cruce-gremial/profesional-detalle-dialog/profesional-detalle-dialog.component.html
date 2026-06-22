@@ -26,6 +26,38 @@
             <span class="value">{{ data.calidad_juridica }}</span>
           </div>
         }
+        @if (rrhh?.sexo) {
+          <div class="info-item">
+            <span class="label">Sexo:</span>
+            <span class="value">{{ rrhh!.sexo }}</span>
+          </div>
+        }
+        @if (rrhh?.edad_actual !== null && rrhh?.edad_actual !== undefined) {
+          <div class="info-item">
+            <span class="label">Edad:</span>
+            <span class="value">{{ rrhh!.edad_actual }} años</span>
+          </div>
+        }
+        @if (rrhh?.fecha_nacimiento) {
+          <div class="info-item">
+            <span class="label">Fecha Nacimiento:</span>
+            <span class="value">{{ rrhh!.fecha_nacimiento }}</span>
+          </div>
+        }
+        @if (rrhh?.proximo_cumpleanos?.dias_restantes !== null && rrhh?.proximo_cumpleanos?.dias_restantes !== undefined) {
+          <div class="info-item">
+            <span class="label">Próximo Cumpleaños:</span>
+            <span class="value cumple-value">
+              <mat-icon class="inline-icon">cake</mat-icon>
+              {{ rrhh!.proximo_cumpleanos.fecha_iso }}
+              @if (rrhh!.proximo_cumpleanos.dias_restantes === 0) {
+                <strong> · ¡Hoy!</strong>
+              } @else {
+                · en {{ rrhh!.proximo_cumpleanos.dias_restantes }} días
+              }
+            </span>
+          </div>
+        }
       </div>
     </mat-card-content>
   </mat-card>
@@ -161,6 +193,151 @@
       </div>
     </mat-card-content>
   </mat-card>
+
+  <!-- ══ DATOS RRHH ═══════════════════════════════════════════════════════ -->
+
+  @if (rrhh) {
+
+    <!-- Carrera Funcionaria -->
+    <mat-card class="info-section rrhh-section">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon class="section-icon">work_history</mat-icon>
+          Carrera Funcionaria
+          <span class="rrhh-chip">RRHH</span>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          @if (rrhh.escalafon) {
+            <div class="info-item">
+              <span class="label">Escalafón:</span>
+              <span class="value">
+                <span class="estamento-badge">{{ rrhh.escalafon }}</span>
+              </span>
+            </div>
+          }
+          @if (rrhh.anios_antiguedad !== null && rrhh.anios_antiguedad !== undefined) {
+            <div class="info-item">
+              <span class="label">Antigüedad:</span>
+              <span class="value">{{ rrhh.anios_antiguedad }} años</span>
+            </div>
+          }
+          @if (rrhh.ingreso_serv) {
+            <div class="info-item">
+              <span class="label">Ingreso al Servicio:</span>
+              <span class="value">{{ rrhh.ingreso_serv }}</span>
+            </div>
+          }
+          @if (rrhh.num_bienios !== null && rrhh.num_bienios !== undefined) {
+            <div class="info-item">
+              <span class="label">N° Bienios:</span>
+              <span class="value">{{ rrhh.num_bienios }}</span>
+            </div>
+          }
+          @if (rrhh.ultimo_cambio_grado) {
+            <div class="info-item">
+              <span class="label">Último Cambio de Grado:</span>
+              <span class="value">{{ rrhh.ultimo_cambio_grado }}</span>
+            </div>
+          }
+          @if (rrhh.unidad_desempeno) {
+            <div class="info-item">
+              <span class="label">Unidad (RRHH):</span>
+              <span class="value">{{ rrhh.unidad_desempeno }}</span>
+            </div>
+          }
+          @if (rrhh.centro_costo) {
+            <div class="info-item">
+              <span class="label">Centro de Costo:</span>
+              <span class="value">{{ rrhh.centro_costo }}</span>
+            </div>
+          }
+          @if (rrhh.con_mejora_desde_2018) {
+            <div class="info-item">
+              <span class="label">Con Mejora desde 2018:</span>
+              <span class="value">{{ rrhh.con_mejora_desde_2018 }}</span>
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Elegibilidad para Cambio de Grado -->
+    <mat-card class="info-section rrhh-section">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon class="section-icon">verified</mat-icon>
+          Elegibilidad para Cambio de Grado
+          <span class="rrhh-chip">RRHH</span>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+
+        <!-- Estado destacado -->
+        <div class="elegibilidad-estado">
+          <span [class]="getBadgeClass(rrhh.elegibilidad.estado)" class="badge-lg">
+            {{ rrhh.elegibilidad.estado }}
+          </span>
+          @if (rrhh.categoria_priorizacion) {
+            <span class="prioridad-chip" [matTooltip]="'Categoría de priorización'">
+              <mat-icon>priority_high</mat-icon>
+              {{ rrhh.categoria_priorizacion }}
+            </span>
+          }
+        </div>
+
+        <div class="info-grid info-grid-mt">
+          @if (getAniosSinCambio() !== null) {
+            <div class="info-item">
+              <span class="label">Años desde Último Cambio:</span>
+              <span class="value años-value">{{ getAniosSinCambio() }}</span>
+            </div>
+          }
+          @if (rrhh.elegibilidad.fecha_referencia_cambio) {
+            <div class="info-item">
+              <span class="label">Fecha Referencia Cambio:</span>
+              <span class="value">{{ rrhh.elegibilidad.fecha_referencia_cambio }}</span>
+            </div>
+          }
+          @if (rrhh.elegibilidad.usa_ingreso_como_proxy) {
+            <div class="info-item info-item-full">
+              <span class="label">Nota:</span>
+              <span class="value nota-proxy">
+                <mat-icon class="inline-icon">info</mat-icon>
+                Fecha de ingreso al servicio usada como referencia de cambio de grado
+              </span>
+            </div>
+          }
+          @if (rrhh.elegibilidad.advertencia) {
+            <div class="info-item info-item-full">
+              <span class="label">Advertencia:</span>
+              <span class="value advertencia-value">
+                <mat-icon class="inline-icon">warning</mat-icon>
+                {{ rrhh.elegibilidad.advertencia }}
+              </span>
+            </div>
+          }
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+
+  } @else {
+
+    <!-- No encontrado en RRHH -->
+    <div class="rrhh-no-encontrado">
+      <mat-icon>info_outline</mat-icon>
+      <div>
+        <div>No se encontraron datos adicionales en el Dashboard RRHH para este RUT.</div>
+        <div class="debug-hint">
+          RUT buscado: <code>{{ data.rut }}</code>
+          &nbsp;·&nbsp; Revisa la consola del navegador (F12 → Console) para diagnóstico completo.
+        </div>
+      </div>
+    </div>
+
+  }
 
   <!-- Acciones -->
   <div class="dialog-actions">
